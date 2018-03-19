@@ -41,20 +41,17 @@ LABEL summary="${SUMMARY}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # Install Apache httpd and PHP
+RUN wget http://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-4-x86_64.rpm
+RUN rpm -iv couchbase-release-1.0-4-x86_64.rpm
+
 RUN yum install -y centos-release-scl && \
     yum-config-manager --enable centos-sclo-rh-testing && \
     INSTALL_PKGS="rh-php71 rh-php71-php rh-php71-php-mysqlnd rh-php71-php-pgsql rh-php71-php-bcmath \
                   rh-php71-php-gd rh-php71-php-intl rh-php71-php-ldap rh-php71-php-mbstring rh-php71-php-pdo \
                   rh-php71-php-process rh-php71-php-soap rh-php71-php-opcache rh-php71-php-xml \
-                  rh-php71-php-gmp rh-php71-php-pecl-apcu httpd24-mod_ssl" && \
+                  rh-php71-php-gmp rh-php71-php-pecl-apcu httpd24-mod_ssl libcouchbase-devel libcouchbase2-bin rh-php71-php-devel" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS --nogpgcheck && \
     rpm -V $INSTALL_PKGS && \
-    yum clean all -y
-
-RUN echo "Installing Couchbase Repo" && \
-    wget http://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-4-x86_64.rpm && \
-    rpm -iv couchbase-release-1.0-4-x86_64.rpm && \
-    yum install -y --setopt=tsflags=nodocs libcouchbase-devel libcouchbase2-bin php-devel && \
     yum clean all -y
 
 ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
