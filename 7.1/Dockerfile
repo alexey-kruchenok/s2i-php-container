@@ -51,6 +51,12 @@ RUN yum install -y centos-release-scl && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y
 
+RUN echo "Installing Couchbase Repo" && \
+    wget http://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-4-x86_64.rpm && \
+    rpm -iv couchbase-release-1.0-4-x86_64.rpm && \
+    yum install -y --setopt=tsflags=nodocs libcouchbase-devel libcouchbase2-bin php-devel && \
+    yum clean all -y
+
 ENV PHP_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/php/ \
     APP_DATA=${APP_ROOT}/src \
     PHP_DEFAULT_INCLUDE_PATH=/opt/rh/rh-php71/root/usr/share/pear \
